@@ -44,6 +44,12 @@ npm install
 npm run dev
 ```
 
+## Mandatory Logging Middleware
+This project strictly follows the requirement of integrating logging throughout the entire codebase:
+- **Global Middleware**: Registered in `app.js` to log every incoming request/response.
+- **Service & Controller Logs**: Granular `Log()` calls are integrated into `notificationService.js`, `notificationController.js`, and `server.js` to track internal logic and server state.
+- **Auto-Auth Logger**: The logger itself handles its own authentication and retries to ensure no logs are lost due to token expiration.
+
 ## Features & Improvements
 - **Authentication**: Implemented a "set and forget" token retrieval system in `notificationService.js` and `Log.js`.
 - **Usability**: Reduced vertical scrolling by moving pagination to the top and compacting the card design.
