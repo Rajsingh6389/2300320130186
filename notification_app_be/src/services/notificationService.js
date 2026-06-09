@@ -1,4 +1,5 @@
 const axios = require("axios");
+const Log = require("../../../logging_middleware/Log");
 
 const API_URL =
   "http://4.224.186.213/evaluation-service/notifications";
@@ -48,6 +49,8 @@ const fetchNotifications = async (
   }
 
   try {
+    await Log("backend", "info", "service", `Fetching notifications from external API (Page: ${page}, Limit: ${limit})`);
+    
     const response = await axios.get(
       API_URL,
       {

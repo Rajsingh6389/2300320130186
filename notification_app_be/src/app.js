@@ -9,12 +9,22 @@ const notificationRoutes =
     "./routes/notificationRoutes"
   );
 
-const app =
-  express();
+const Log = require("../../logging_middleware/Log");
+
+const app = express();
 
 app.use(cors());
-
 app.use(express.json());
+
+// Mandatory Logging Middleware
+app.use(async (req, res, next) => {
+  try {
+    await Log("express", "info", "notification_app_be", `Request: ${req.method} ${req.url}`);
+  } catch (err) {
+    console.error("Middleware Logging Error:", err.message);
+  }
+  next();
+});
 
 app.use(
   "/api/notifications",
