@@ -1,65 +1,145 @@
-# Notification Application - Submission (2300320130186)
+# Proof of Work
 
-This project consists of a full-stack notification system with a React frontend, Node.js backend, and a logging middleware. It features a **Priority Inbox** with weight-based scoring and automated **Bearer Token Authentication**.
+## 1. Notifications Page (Filter: Event)
 
-## Project Structure
-- `notification_app_be`: Node.js/Express Backend.
-- `notification_app_fe`: React/Vite Frontend.
-- `logging_middleware`: Custom logging service with auto-retry authentication.
-- `screenshots/`: Proof-of-work images.
+This screenshot demonstrates the Notifications Page displaying only Event-type notifications after applying the filter.
 
-## Backend API Endpoints
-
-### 1. Standard Notifications
-- **GET** `/api/notifications`
-- **Query Params**: 
-  - `type`: (Optional) `Placement`, `Result`, or `Event`.
-  - `page`: (Optional) For pagination (defaults to 1).
-- **Description**: Fetches standard notifications from the external test API.
-
-### 2. Priority Inbox
-- **GET** `/api/notifications/priority`
-- **Description**: Fetches notifications and sorts them by priority using a weight-based scoring formula:
-  - `Placement`: 3 pts
-  - `Result`: 2 pts
-  - `Event`: 1 pt
-  - *Score = (Weight * 1,000,000) - AgeInSeconds*
-
-## Setup & Running
-
-### 1. Environment Configuration
-Ensure the [.env](file:///c:/Users/rm273/Downloads/Afford/2300320130186/notification_app_be/.env) file in `notification_app_be` is populated with the correct credentials.
-
-### 2. Backend
-```bash
-cd notification_app_be
-npm install
-npm start
-```
-
-### 3. Frontend
-```bash
-cd notification_app_fe
-npm install
-npm run dev
-```
-
-## Mandatory Logging Middleware
-This project strictly follows the requirement of integrating logging throughout the entire codebase:
-- **Global Middleware**: Registered in `app.js` to log every incoming request/response.
-- **Service & Controller Logs**: Granular `Log()` calls are integrated into `notificationService.js`, `notificationController.js`, and `server.js` to track internal logic and server state.
-- **Auto-Auth Logger**: The logger itself handles its own authentication and retries to ensure no logs are lost due to token expiration.
-
-## Features & Improvements
-- **Authentication**: Implemented a "set and forget" token retrieval system in `notificationService.js` and `Log.js`.
-- **Usability**: Reduced vertical scrolling by moving pagination to the top and compacting the card design.
-- **Error Handling**: Added robust retries for expired tokens (401 errors) and validation for API limits (max 10 items).
-
-## Proof of Work
-Screenshots of the working application can be found in the [screenshots/](file:///c:/Users/rm273/Downloads/Afford/2300320130186/screenshots) folder.
-- `media__...161.png`: Notifications filtered by Event.
-- `media__...188.png`: Priority Inbox scoring.
-- `media__...424.png`: API verification via Postman.
+![Notifications Page](./screenshots/event_notification.png)
 
 ---
-**System Design**: Detailed architectural decisions are documented in [notification_system_design.md](file:///c:/Users/rm273/Downloads/Afford/2300320130186/notification_system_design.md).
+
+## 2. Priority Inbox
+
+This screenshot shows the Priority Inbox where notifications are automatically sorted based on priority levels.
+
+![Priority Inbox](./screenshots/priority_index.png)
+
+---
+
+## 3. Notification API Verification (Postman)
+
+Verification of the Notifications API endpoint using Postman.
+
+![Notification API](./screenshots/notification_api_inpostman.png)
+
+---
+
+## 4. Priority API Verification (Postman)
+
+Verification of the Priority Notifications API endpoint using Postman.
+
+![Priority API](./screenshots/priority_api_inpostman.png)
+
+---
+
+## 5. Placement Notification Example
+
+Example of a Placement notification returned by the API and displayed in the UI.
+
+![Placement Notification](./screenshots/placement_notification.png)
+
+---
+
+## 6. Result Notification Example
+
+Example of a Result notification returned by the API and displayed in the UI.
+
+![Result Notification](./screenshots/result_notification.png)
+
+---
+
+# System Architecture Design
+
+```mermaid
+graph TD
+
+    User[User Browser]
+
+    FE[React Frontend]
+
+    BE[Express Backend]
+
+    LM[Logging Middleware]
+
+    API[External Test API]
+
+    User --> FE
+    FE --> BE
+    BE --> LM
+    BE --> API
+
+    API --> BE
+    BE --> FE
+    FE --> User
+```
+
+## Architecture Description
+
+### Frontend (React)
+
+- Displays notifications fetched from the backend.
+- Supports filtering notifications by category.
+- Displays priority notifications separately.
+- Provides a responsive user interface.
+
+### Backend (Node.js + Express)
+
+- Exposes REST APIs.
+- Fetches notifications from the external test server.
+- Processes and filters notification data.
+- Determines notification priority.
+
+### Logging Middleware
+
+- Logs incoming API requests.
+- Logs outgoing API responses.
+- Helps with debugging and monitoring.
+
+### External Test API
+
+- Provides notification data.
+- Acts as the source of truth for notifications.
+- Accessed securely through backend services.
+
+## Request Flow
+
+1. User opens the React application.
+2. React frontend calls backend APIs.
+3. Backend logs the request using middleware.
+4. Backend fetches data from the external test API.
+5. Notifications are processed and prioritized.
+6. Response is returned to the frontend.
+7. Frontend renders notifications to the user.
+
+## Technology Stack
+
+| Layer | Technology |
+|---------|------------|
+| Frontend | React.js |
+| Backend | Node.js |
+| Framework | Express.js |
+| HTTP Client | Axios |
+| API Testing | Postman |
+| Version Control | Git & GitHub |
+
+## Project Structure
+
+```text
+2300320130186/
+│
+├── notification_app_fe/
+│
+├── notification_app_be/
+│
+├── screenshots/
+│   ├── event_notification.png
+│   ├── priority_index.png
+│   ├── notification_api_inpostman.png
+│   ├── priority_api_inpostman.png
+│   ├── placement_notification.png
+│   └── result_notification.png
+│
+├── notification_system_design.md
+│
+└── README.md
+```
